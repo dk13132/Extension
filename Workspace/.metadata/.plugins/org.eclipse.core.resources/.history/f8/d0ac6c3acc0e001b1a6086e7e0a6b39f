@@ -1,0 +1,21 @@
+package com.extension.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.extension.model.ExtensionDto;
+
+@Controller
+public class ExtensionController {
+	
+	@GetMapping("/extension")
+	public String form() {
+		return "extensionForm";
+	}
+	
+	@PostMapping(value= "/extensionAdd", produces="text/plane;charset=UTF-8")
+	public void extensionInsert(ExtensionDto dto) {
+		
+	}
+}

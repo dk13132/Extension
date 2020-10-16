@@ -1,0 +1,44 @@
+package com.extension.controller;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.extension.model.ExtensionDto;
+import com.google.gson.Gson;
+
+@RestController
+public class RestExtensionController {
+	@Autowired
+	private SqlSession session;
+
+	@PostMapping(value= "/extensionAdd", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public String extensionInsert(ExtensionDto dto) {
+		return service.extensionAdd(dto);
+	}
+	
+	@PostMapping(value= "/extensionDelete", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public String extensionDelete(ExtensionDto dto) {
+		return service.extensionDelete(dto);
+	}
+	
+	@PostMapping(value= "/extensionSelect", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public String extensionSelect() {
+		List<ExtensionDto> list = service.extensionSelect();
+		Gson gson = new Gson();
+		return gson.toJson(list);
+	}
+	
+	@PostMapping("/count")
+	@ResponseBody
+	public int customCount() {
+		return service.customCount();
+	}
+}

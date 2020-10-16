@@ -1,0 +1,39 @@
+package com.extension.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.extension.model.ExtensionDto;
+import com.extension.service.ExtensionService;
+
+@Controller
+public class ExtensionController {
+	@Autowired
+	private ExtensionService service;
+	
+	@GetMapping("/extension")
+	public String form() {
+		return "extensionForm";
+	}
+	
+	@PostMapping(value= "/extensionAdd", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public void extensionInsert(ExtensionDto dto) {
+		service.extensionAdd(dto);
+	}
+	
+	@PostMapping(value= "/extensionDelete", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public void extensionDelete(ExtensionDto dto) {
+		service.extensionDelete(dto);
+	}
+	
+	@PostMapping(value= "/extensionSelect", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public void extensionDelete(ExtensionDto dto) {
+		service.extensionDelete(dto);
+	}
+}

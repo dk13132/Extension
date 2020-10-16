@@ -1,0 +1,41 @@
+package com.file.util;
+
+import java.io.File;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+@Component
+public class FileUtils {
+	private static final String filePath = "D:\\item\\";
+	
+	public Map<String, Object> insertFileInfo(MultipartHttpServletRequest request) throws Exception {
+		MultipartFile multipartFile = request.getFile("file");
+		String originalFileName = multipartFile.getOriginalFilename();
+		String originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+		String storedFileName = getRandomString() + originalFileExtension;
+		
+		Map<String, Object> map = null;
+		
+		File file = new File(filePath);
+		
+		if (file.exists() == false) {
+			file.mkdirs();
+		}
+		
+		file = new File(filePath + storedFileName);
+		multipartFile.transferTo(file);
+		map.put("file_name", originalFileName);
+		map.put("stored_file_name", storedFileName);
+		map.put("filesize", multipartFile.getSize());
+		map.put("file_path", file.getPath());
+		return map;
+	}
+	
+	public static String getRandomString() {
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+}

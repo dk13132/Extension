@@ -1,0 +1,171 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>파일 확장자 차단</title>
+<style>
+hr {
+	height: 2px;
+	background-color: black;
+}
+
+h2 {
+	margin-left: 5px;
+}
+
+#extensionList {
+	border: 1px solid black;
+	border-radius: 0.5em;
+	height: auto;
+	margin-left: 140px;
+	margin-top: 10px;
+	min-height: 300px;
+	width: 500px;
+}
+
+#customExtension {
+	border-radius: 0.5em;
+}
+
+.addDiv {
+	border: 1px solid black;
+	border-radius: 0.5em;
+	margin-left: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	display: inline-block;
+}
+
+.btn {
+	margin-left: 10px
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+	$(function() {
+		load();
+
+		$(".check").click(function() { //고정 확장자 체크 및 체크해제 이벤트
+			var name = $(this).val();
+			var type = "F";
+			//var params = "name=" + name + "&type=" + type;
+			if ($(this).prop("checked") == true) {
+				url = "extensionAdd";
+			} else {
+				url = "extensionDelete";
+			}
+			url += "/"+name+"/"+type;
+			checkAjax(url);
+		});
+
+		$("#customAdd")
+				.click(
+						function() {
+							var name = $("#customExtension").val();
+							var type = "C"
+							var params = "name=" + name + "&type=" + type;
+							var url = "extensionAdd";
+							checkAjax(url, params);
+						});
+
+		$(document).on("click", ".btn", function() {
+			var name = $(this).prop("id");
+			//var params = "name=" + name;
+			var url = "extensionDelete/name";
+			checkAjax(url);
+			$("#"+name+"Div").remove();
+		});
+	});
+
+	function addExtension(name){
+		$("#extensionList")
+		.append(
+				"<div class='addDiv' id='" + name + "Div'>"
+						+ name
+						+ "<input type='button' class='btn' id='" + name + "' value='X'></div>");
+	}
+
+	function checkAjax(url) {
+		var name = $("#customExtension").val();
+		
+		$.ajax({
+			type : "get",
+			url : url
+		}).done(function(args){
+			if(args == "err"){
+				alert("중복 된 확장자가 존재합니다.");
+				return;
+			} else if(args == "fixingErr") {
+				alert("고정 확장자는 커스텀 확장자로 추가 할 수 없습니다.");
+				return;
+			} else if(args == "addSuccess"){
+				addExtension(name);
+			}
+			count();
+		});
+	}
+
+	function load() {
+		count();
+		$.ajax({
+					type : "post",
+					url : "extensionSelect",
+					dataType : "json"
+				})
+				.done(
+						function(args) {
+							if (args !== null) {
+								for (var i = 0; i < args.length; i++) {
+									if (args[i].type == "F") {
+										$("#" + args[i].name).prop("checked",
+												true);
+									} else {
+										addExtension(args[i].name);
+									}
+								}
+							}
+						});
+	}
+
+	function count(){
+		$.ajax({
+			type : "post",
+			url : "count",
+			dataType : "text"
+		})
+		.done(function(args){
+			$("#count").html("&nbsp;"+args+"/200");
+		});
+	}
+</script>
+</head>
+<body>
+	<h2>◎ 파일 확장자 차단</h2>
+	<hr>
+	파일확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한
+	<br> 고정 확장자 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="checkbox" class="check" id="bat" value="bat" /> bat
+	&nbsp;
+	<input type="checkbox" class="check" id="cmd" value="cmd" /> cmd
+	&nbsp;
+	<input type="checkbox" class="check" id="com" value="com" /> com
+	&nbsp;
+	<input type="checkbox" class="check" id="cpl" value="cpl" /> cpl
+	&nbsp;
+	<input type="checkbox" class="check" id="exe" value="exe" /> exe
+	&nbsp;
+	<input type="checkbox" class="check" id="scr" value="scr" /> scr
+	&nbsp;
+	<input type="checkbox" class="check" id="js" value="js" /> js &nbsp;
+	<br>
+	<br> 커스텀 확장자 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="text" id="customExtension" name="customExtension"
+		maxlength="20" />
+	<input type="button" id="customAdd" value="+추가" />
+	<div id="extensionList">
+		<div id="count">&nbsp;0/200</div>
+	</div>
+</body>
+</html>

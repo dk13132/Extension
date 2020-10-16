@@ -1,0 +1,12 @@
+package com.extension.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/extension")
+public class ExtensionController {
+	public String form() {
+		return "extensionForm";
+	}
+}

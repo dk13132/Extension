@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="extension">
+	<insert id="extensionAdd" parameterType="com.extension.model.ExtensionDto">
+		insert into extension values(#{name}, #{type})
+	</insert>
+	
+	<delete id="extensionDelete" parameterType="String">
+		delete from extension where name=#{name}
+	</delete>
+	
+	<select id="extensionSelect" resultType="com.extension.model.ExtensionDto">
+		select * from extension;
+	</select>
+	
+	<select id="customCount" resultType="int">
+		select count(*) from extension where type = "C"
+	</select>
+</mapper>

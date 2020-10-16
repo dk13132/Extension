@@ -1,0 +1,51 @@
+package com.extension.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.extension.model.ExtensionDto;
+import com.extension.service.ExtensionService;
+import com.google.gson.Gson;
+
+@Controller
+public class ExtensionController {
+	@Autowired
+	private ExtensionService service;
+	
+	private String[] fixing = {"bat", "cmd", "com", "cpl", "exe", "scr", "js"};
+	
+	@GetMapping("/extension")
+	public String form() {
+		return "extensionForm";
+	}
+	
+	@PostMapping(value= "/extensionAdd", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public void extensionInsert(ExtensionDto dto) {
+		for(int i = 0; i < fixing.length; i++) {
+			if(dto.getName().equals(fixing)) {
+				
+			}
+		}
+		service.extensionAdd(dto);
+	}
+	
+	@PostMapping(value= "/extensionDelete", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public void extensionDelete(ExtensionDto dto) {
+		service.extensionDelete(dto);
+	}
+	
+	@PostMapping(value= "/extensionSelect", produces="text/plane;charset=UTF-8")
+	@ResponseBody
+	public String extensionSelect() {
+		List<ExtensionDto> list = service.extensionSelect();
+		Gson gson = new Gson();
+		return gson.toJson(list);
+	}
+}

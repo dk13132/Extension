@@ -1,0 +1,21 @@
+package com.extension.service;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.extension.model.ExtensionDto;
+
+@Repository
+public class ExtensionDao {
+	@Autowired
+	private SqlSession session;
+	
+	public void extensionAdd(ExtensionDto dto) {
+		session.insert("extension.extensionAdd", dto);
+	}
+	
+	public void extensionDelete(String name) {
+		session.delete("extension.extensionAdd", dto);
+	}
+}

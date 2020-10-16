@@ -1,0 +1,38 @@
+package com.extension.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.extension.model.ExtensionDto;
+
+@Service
+public class ExtensionService {
+	@Autowired
+	private ExtensionDao dao;
+	
+	public String extensionAdd(ExtensionDto dto) {
+		int err = 0;
+		for(int i = 0; i < fixing.length; i++) {
+			if(dto.getName().equals(fixing[i])) {
+				err = 1;
+				break;
+			}
+		}
+		if(err == 1) {
+			
+		} else {
+			dao.extensionAdd(dto);
+		}
+	}
+	
+	public void extensionDelete(ExtensionDto dto) {
+		String name = dto.getName();
+		dao.extensionDelete(name);
+	}
+	
+	public List<ExtensionDto> extensionSelect() {
+		return dao.extensionSelect();
+	}
+}

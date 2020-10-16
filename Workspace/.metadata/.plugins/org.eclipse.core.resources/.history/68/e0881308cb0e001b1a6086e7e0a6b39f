@@ -1,0 +1,8 @@
+package com.extension.service;
+
+import org.apache.ibatis.session.SqlSession;
+
+public class ExtensionDao {
+	@AutoWired
+	SqlSession session;
+}

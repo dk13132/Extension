@@ -1,0 +1,56 @@
+package com.extension.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.extension.model.ExtensionDto;
+
+@Service
+public class ExtensionService {
+	@Autowired
+	private ExtensionDao dao;
+
+	private String[] fixing = { "bat", "cmd", "com", "cpl", "exe", "scr", "js" };
+
+	public String extensionAdd(ExtensionDto dto) {
+		int err = 0;
+		for (int i = 0; i < fixing.length; i++) {
+			if (dto.getName().equals(fixing[i])) {
+				err = 1;
+				break;
+			}
+		}
+
+		List<ExtensionDto> list = dao.extensionSelect();
+
+		if (err == 0) {
+			for (int i = 0; i < list.size(); i++) {
+				if (dto.getName().equals(list.get(i).getName())) {
+					err = 2;
+					break;
+				}
+			}
+		}
+
+		if (err == 1) {
+			return "err";
+		} else if(err == 2) {
+			return "fixingErr";
+		} else {
+			dao.extensionAdd(dto);
+			return "addSuccess";
+		}
+	}
+
+	public String extensionDelete(ExtensionDto dto) {
+		String name = dto.getName();
+		dao.extensionDelete(name);
+		return "success";
+	}
+
+	public List<ExtensionDto> extensionSelect() {
+		return dao.extensionSelect();
+	}
+}
